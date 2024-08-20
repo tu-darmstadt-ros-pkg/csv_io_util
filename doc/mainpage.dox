@@ -1,0 +1,18 @@
+/** \mainpage CSV IO Util
+  
+  \section intro_sec Usage
+  
+  The classes csv_io_util::CsvExporter and csv_io_util::CsvImporter can be used to export and import CSV files. Utility functions for handling file paths, directories and files are contained in file_system_util.h.
+  
+	For examples on how to use the package you can have a look at the unit tests in the directory test. 
+*/
+
+/**
+ * @namespace csv_io_util 
+ * @brief namespace of the csv_io_util package
+ */
+
+/**
+ * @namespace csv_io_util::test 
+ * @brief namespace of the unit tests for the csv_io_util package
+ */
