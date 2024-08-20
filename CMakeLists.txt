@@ -1,16 +1,11 @@
-cmake_minimum_required(VERSION 3.1)
+cmake_minimum_required(VERSION 3.3)
 project(csv_io_util)
 
 set (CMAKE_CXX_STANDARD 17)
 #set(CMAKE_BUILD_TYPE Debug)
 
-#Find catkin macros and libraries
-find_package(catkin REQUIRED)
-
-include_directories(
-    include
-    SYSTEM
-    ${catkin_INCLUDE_DIRS})
+## Find ament macros and libraries
+find_package(ament_cmake REQUIRED)
 
 # add cmake functions
 list (APPEND CMAKE_MODULE_PATH ${PROJECT_SOURCE_DIR}/cmake)
@@ -27,17 +22,10 @@ if(BUILD_ALL)
   set(BUILD_DOC ON)
 endif()
 
-# setup catkin package
-catkin_package(
-  INCLUDE_DIRS include
-  LIBRARIES ${PROJECT_NAME}
-)
 
 ###########
 ## Build ##
 ###########
-
-include_directories(include SYSTEM)
 
 set(HEADERS
     include/${PROJECT_NAME}/csv_exporter.h
@@ -51,31 +39,38 @@ set(SOURCES
   src/file_system_util.cpp
 )
 
-
 add_library(${PROJECT_NAME} ${SOURCES} ${HEADERS})
-add_dependencies(${PROJECT_NAME} ${catkin_EXPORTED_TARGETS})
 set_target_properties(${PROJECT_NAME} PROPERTIES LINKER_LANGUAGE CXX)
-target_link_libraries(${PROJECT_NAME} ${catkin_LIBRARIES}  ${pkg_nlopt_LIBRARIES})
-
-
+target_include_directories(${PROJECT_NAME}
+PUBLIC
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include>"
+    "$<INSTALL_INTERFACE:include>"
+PRIVATE
+  SYSTEM
+)
 #############
 ## Install ##
 #############
 
 
-## Mark executables and/or libraries for installation
-install(TARGETS ${PROJECT_NAME}
-  ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
-  RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}
+install(
+  DIRECTORY include/
+  DESTINATION include
 )
 
-## Mark cpp header files for installation
-install(DIRECTORY include/${PROJECT_NAME}/
-  DESTINATION ${CATKIN_PACKAGE_INCLUDE_DESTINATION}
-  FILES_MATCHING PATTERN "*.h"
+install(
+  TARGETS ${PROJECT_NAME}
+  EXPORT export_${PROJECT_NAME}
+  ARCHIVE DESTINATION lib
+  LIBRARY DESTINATION lib
+  RUNTIME DESTINATION bin
+  DESTINATION lib/${PROJECT_NAME}
 )
 
+ament_export_targets(export_${PROJECT_NAME} HAS_LIBRARY_TARGET)
+ament_export_libraries(${PROJECT_NAME})
+ament_export_include_directories(include)
+ament_export_dependencies(yaml-cpp)
 
 #############
 ## Testing ##
@@ -87,7 +82,6 @@ set(TEST_SOURCES
     test/src/file_system_util_test.cpp
 )
 
-
 add_gtest_compile()
 
 ##########
@@ -96,4 +90,4 @@ add_gtest_compile()
 
 add_doxygen_compile()
 
-
+ament_package()

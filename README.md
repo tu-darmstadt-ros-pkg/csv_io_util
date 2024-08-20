@@ -85,8 +85,9 @@ csv_exporter.flush();
 ```
 
 ## Installation
-While the package is set up to be build using [catkin](http://wiki.ros.org/catkin), it has no ROS dependencies.
-After cloning it into your catkin workspace use package using `catkin build`.
+While the package is set up to be build using [ament](https://design.ros2.org/articles/ament.html), it has no ROS dependencies.
+After cloning it into your catkin workspace use package using `colcon build`.
+This package has been developed originally using catkin as build system. You can find this version on the "catkin_version" branch.
 
 ## Future Development & Contribution
 The project during which the package was developed has been discontinued.
